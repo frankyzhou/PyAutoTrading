@@ -2,9 +2,10 @@
 # QQ群： 486224275
 __author__ = '人在江湖'
 
-import Tkinter.messagebox
+
 from Tkinter import *
-from Tkinter.ttk import *
+import tkMessageBox
+from ttk import *
 import datetime
 import threading
 import pickle
@@ -27,17 +28,18 @@ is_ordered = [1] * 5  # 1：准备  0：交易成功 -1：交易失败
 
 class Operation:
     def __init__(self, top_hwnd):
-        try:
+        # try:
             self.__top_hwnd = top_hwnd
             temp_hwnds = dumpWindows(top_hwnd)
-            self.__wanted_hwnds = findSubWindows(temp_hwnds, 70)  # 华泰专用版
-            # self.__wanted_hwnds = findSubWindows(temp_hwnds, 73)   # 同花顺通用版
+            # self.__wanted_hwnds = findSubWindows(temp_hwnds, 70)  # 华泰专用版
+            self.__wanted_hwnds = findSubWindows(temp_hwnds, 73)   # 同花顺通用版
             self.__control_hwnds = []
             for hwnd, text_name, class_name in self.__wanted_hwnds:
+                # print text_name
                 if class_name in ('Button', 'Edit'):
                     self.__control_hwnds.append((hwnd, text_name, class_name))
-        except:
-            Tkinter.messagebox.showerror('错误', '无法获得双向委托界面的窗口句柄')
+        # except:
+        #     tkMessageBox.showerror('错误', '无法获得双向委托界面的窗口句柄')
 
     def __buy(self, code, stop_price, quantity):
         """下买单
@@ -47,7 +49,7 @@ class Operation:
         :return:
         """
         click(self.__control_hwnds[0][0])
-        setEditText(self.__control_hwnds[0][0], code)
+        setEditText(self.__control_hwnds[0][0], str(code))
         setEditText(self.__control_hwnds[1][0], stop_price)
         time.sleep(0.2)
         setEditText(self.__control_hwnds[2][0], quantity)
@@ -59,7 +61,7 @@ class Operation:
         """下卖单
         """
         click(self.__control_hwnds[4][0])
-        setEditText(self.__control_hwnds[4][0], code)
+        setEditText(self.__control_hwnds[4][0], str(code))
         setEditText(self.__control_hwnds[5][0], stop_price)
         time.sleep(0.2)
         setEditText(self.__control_hwnds[6][0], quantity)
@@ -71,7 +73,8 @@ class Operation:
         """
         下单函数
         """
-        restoreFocusWindow(self.__top_hwnd)
+        # restoreFocusWindow(self.__top_hwnd)
+        print code, stop_prices
         if direction == 'B':
             self.__buy(code, stop_prices[0], quantity)
         if direction == 'S':
@@ -160,9 +163,10 @@ def monitor():
     global actual_stock_info, consignation_info, is_ordered, set_stock_info
     count = 1
 
-    top_hwnd = findTopWindow(wantedText='网上股票交易系统5.0')
+    top_hwnd = findTopWindow(wantedText=u'网上股票交易系统5.0')
+
     if top_hwnd == 0:
-        Tkinter.messagebox.showerror('错误', '请先打开华泰证券交易软件，再运行本软件')
+        tkMessageBox.showerror('错误', '请先打开华泰证券交易软件，再运行本软件')
     else:
         operation = Operation(top_hwnd)
 
@@ -174,7 +178,7 @@ def monitor():
                 if is_start and actual_code and is_ordered[row] == 1 \
                         and set_stock_info[row][1] and set_stock_info[row][2] > 0 \
                         and set_stock_info[row][3] and set_stock_info[row][4] \
-                        and datetime.datetime.now().time() > set_stock_info[row][5]:
+                        and datetime.datetime.now().time() != set_stock_info[row][5]:
                     if set_stock_info[row][1] == '>' and float(actual_price) > set_stock_info[row][2]:
                         dt = datetime.datetime.now()
                         if operation.order(actual_code, stop_prices,
@@ -331,8 +335,8 @@ class StockGui:
             with open('stockInfo.dat', 'rb') as fp:
                 set_stock_info = pickle.load(fp)
                 consignation_info = pickle.load(fp)
-        except FileNotFoundError as error:
-            Tkinter.messagebox.showerror('错误', error)
+        except Exception as error:
+            tkMessageBox.showerror('错误', error)
 
         for row in range(self.rows):
             for col in range(self.cols):
@@ -460,6 +464,6 @@ class StockGui:
 if __name__ == '__main__':
     t1 = threading.Thread(target=StockGui)
     t1.start()
-    t1.join(2)
+    # t1.join(2)
     t2 = threading.Thread(target=monitor)
     t2.start()

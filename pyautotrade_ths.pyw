@@ -2,9 +2,9 @@
 # QQ群： 486224275
 __author__ = '人在江湖'
 
-import tkinter.messagebox
-from tkinter import *
-from tkinter.ttk import *
+import Tkinter.messagebox
+from Tkinter import *
+from Tkinter.ttk import *
 import datetime
 import threading
 import pickle
@@ -37,7 +37,7 @@ class Operation:
                 if class_name in ('Button', 'Edit'):
                     self.__control_hwnds.append((hwnd, text_name, class_name))
         except:
-            tkinter.messagebox.showerror('错误', '无法获得双向委托界面的窗口句柄')
+            Tkinter.messagebox.showerror('错误', '无法获得双向委托界面的窗口句柄')
 
     def __buy(self, code, stop_price, quantity):
         """下买单
@@ -162,7 +162,7 @@ def monitor():
 
     top_hwnd = findTopWindow(wantedText='网上股票交易系统5.0')
     if top_hwnd == 0:
-        tkinter.messagebox.showerror('错误', '请先打开华泰证券交易软件，再运行本软件')
+        Tkinter.messagebox.showerror('错误', '请先打开华泰证券交易软件，再运行本软件')
     else:
         operation = Operation(top_hwnd)
 
@@ -332,7 +332,7 @@ class StockGui:
                 set_stock_info = pickle.load(fp)
                 consignation_info = pickle.load(fp)
         except FileNotFoundError as error:
-            tkinter.messagebox.showerror('错误', error)
+            Tkinter.messagebox.showerror('错误', error)
 
         for row in range(self.rows):
             for col in range(self.cols):

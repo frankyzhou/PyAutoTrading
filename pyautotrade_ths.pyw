@@ -164,14 +164,14 @@ def monitor():
     count = 1
 
     top_hwnd = findTopWindow(wantedText=u'网上股票交易系统5.0')
-
+    # top_hwnd = findTopWindow(wantedText=u'同花顺(v8.60.20) - A股技术分析')
     if top_hwnd == 0:
         tkMessageBox.showerror('错误', '请先打开华泰证券交易软件，再运行本软件')
     else:
         operation = Operation(top_hwnd)
 
     while is_monitor and top_hwnd:
-
+        position_utf = []
         if is_start:
             actual_stock_info = getStockData(set_stock_info)
             for row, (actual_code, actual_name, actual_price, stop_prices) in enumerate(actual_stock_info):
@@ -212,6 +212,12 @@ def monitor():
 
         if count % 200 == 0:
             operation.clickRefreshButton()
+            print "已经刷新"
+            print operation.getMoney()
+            position = operation.getPosition()
+
+            for s in position:
+                position_utf += [e.decode("gbk") for e in s]
             time.sleep(1)
         time.sleep(3)
         count += 1

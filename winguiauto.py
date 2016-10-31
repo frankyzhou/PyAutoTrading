@@ -23,13 +23,13 @@ def restoreFocusWindow(hwnd):
     win32gui.SetForegroundWindow(hwnd)
     time.sleep(0.2)
 
-def getTableData(cols):
+def getTableData():
     content = _getContentsFromClipboard()
     lst = content.strip().split()[:-1]
-    matrix = []
-    for i in range(0, len(lst) // cols):
-        matrix.append(lst[i * cols:(i + 1) * cols])
-    return matrix[1:]
+    # matrix = []
+    # for i in range(0, len(lst) // cols):
+    #     matrix.append(lst[i * cols:(i + 1) * cols])
+    return lst[15:]
 
 
 def getListViewInfo(hwnd, cols):
@@ -102,9 +102,9 @@ def findSubWindows(windows, numChildWindows):
         # print "-"*20 + str(windows.index(window))
         # for hwnd, text_name, class_name in windowContent:
         #     # print text_name.decode("gbk")
-        if len(windowContent) > 0:
-            print len(windowContent)
-            print windowText
+        # if len(windowContent) > 0:
+        #     print len(windowContent)
+        #     print windowText
         if len(windowContent) == numChildWindows:
             return windowContent
 

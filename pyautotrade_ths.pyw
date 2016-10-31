@@ -10,7 +10,6 @@ import datetime
 import threading
 import pickle
 import time
-import math
 
 import win32con
 import tushare as ts
@@ -35,10 +34,14 @@ class Operation:
             # self.__wanted_hwnds = findSubWindows(temp_hwnds, 70)  # 华泰专用版
             self.__wanted_hwnds = findSubWindows(temp_hwnds, 73)   # 同花顺通用版
             self.__control_hwnds = []
+            self.__wanted_hwnds_tmp = []
             for hwnd, text_name, class_name in self.__wanted_hwnds:
-                # print text_name
+                self.__wanted_hwnds_tmp.append((hwnd, text_name.decode("gbk"), class_name))
                 if class_name in ('Button', 'Edit'):
-                    self.__control_hwnds.append((hwnd, text_name, class_name))
+                    self.__control_hwnds.append((hwnd, text_name.decode("gbk"), class_name))
+                    if class_name == 'Button':
+                        name = text_name.decode("gbk")
+                        clickButton(hwnd)
         # except:
         #     tkMessageBox.showerror('错误', '无法获得双向委托界面的窗口句柄')
 
@@ -106,8 +109,20 @@ class Operation:
         sendKeyEvent(ord('C'), 0)
         sendKeyEvent(ord('C'), win32con.KEYEVENTF_KEYUP)
         sendKeyEvent(win32con.VK_CONTROL, win32con.KEYEVENTF_KEYUP)
-        return getTableData(11)
+        position_list = []
+        position = getTableData()
+        stock_num = len(position) / 13
+        for i in range(stock_num):
+            stock = {}
+            stock["code"] = str(position[i * 13])
+            stock["amount"] = int(position[i * 13 + 2])
+            stock["enable"] = int(position[i * 13 + 3])
+            stock["price"] = float(position[i * 13 + 7])
+            stock["turnover"] = float(position[i * 13 + 8])
+            position_list.append(stock)
+        return position_list
 
+#     查询委托：control_hwnds[16][0], 其他持仓可以使用快捷键
 
 def pickCodeFromItems(items_info):
     """
@@ -172,7 +187,6 @@ def monitor():
         operation = Operation(top_hwnd)
 
     while is_monitor and top_hwnd:
-        position_utf = []
         if is_start:
             actual_stock_info = getStockData(set_stock_info)
             for row, (actual_code, actual_name, actual_price, stop_prices) in enumerate(actual_stock_info):
@@ -211,25 +225,21 @@ def monitor():
                             is_ordered[row] = -1
                         time.sleep(1)
 
-        if count % 7 == 0:
+        if count % 1 == 0:
             operation.clickRefreshButton()
             print "已经刷新"
             print operation.getMoney()
             position = operation.getPosition()
-
-            for s in position:
-                position_utf += [e.decode("gbk") for e in s]
-            time.sleep(1)
-            position_bk = []
-            stock_num = math.ceil((len(position_utf) - 3) / 13.0)
-            stock = {}
+            position_list = []
+            stock_num = len(position) / 13
             for i in range(stock_num):
-                stock["code"] = str(position_utf[i*13+3])
-                stock["amount"] = int(position_utf[i*13+5])
-                stock["enable"] = int(position_utf[i*13+6])
-                stock["price"] = float(position_utf[i*13+10])
-                stock["turnover"] = float(position_utf[i*13+11])
-                position_bk.append(stock)
+                stock = {}
+                stock["code"] = str(position[i*13])
+                stock["amount"] = int(position[i*13+2])
+                stock["enable"] = int(position[i*13+3])
+                stock["price"] = float(position[i*13+7])
+                stock["turnover"] = float(position[i*13+8])
+                position_list.append(stock)
         time.sleep(3)
         count += 1
 

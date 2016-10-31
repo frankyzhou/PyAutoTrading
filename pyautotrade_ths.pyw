@@ -10,6 +10,7 @@ import datetime
 import threading
 import pickle
 import time
+import math
 
 import win32con
 import tushare as ts
@@ -85,14 +86,14 @@ class Operation:
         """
         点击刷新按钮
         """
-        restoreFocusWindow(self.__top_hwnd)
+        #restoreFocusWindow(self.__top_hwnd)
         clickButton(self.__control_hwnds[12][0])
 
     def getMoney(self):
         """
         获取可用资金
         """
-        restoreFocusWindow(self.__top_hwnd)
+        #restoreFocusWindow(self.__top_hwnd)
         return float(self.__wanted_hwnds[51][1])
 
     def getPosition(self):
@@ -210,7 +211,7 @@ def monitor():
                             is_ordered[row] = -1
                         time.sleep(1)
 
-        if count % 200 == 0:
+        if count % 7 == 0:
             operation.clickRefreshButton()
             print "已经刷新"
             print operation.getMoney()
@@ -219,6 +220,16 @@ def monitor():
             for s in position:
                 position_utf += [e.decode("gbk") for e in s]
             time.sleep(1)
+            position_bk = []
+            stock_num = math.ceil((len(position_utf) - 3) / 13.0)
+            stock = {}
+            for i in range(stock_num):
+                stock["code"] = str(position_utf[i*13+3])
+                stock["amount"] = int(position_utf[i*13+5])
+                stock["enable"] = int(position_utf[i*13+6])
+                stock["price"] = float(position_utf[i*13+10])
+                stock["turnover"] = float(position_utf[i*13+11])
+                position_bk.append(stock)
         time.sleep(3)
         count += 1
 

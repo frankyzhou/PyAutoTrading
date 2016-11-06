@@ -1,8 +1,4 @@
 # -*- encoding: utf8 -*-
-# QQ群： 486224275
-__author__ = '人在江湖'
-
-
 from Tkinter import *
 import tkMessageBox
 from ttk import *
@@ -39,9 +35,9 @@ class Operation:
                 self.__wanted_hwnds_tmp.append((hwnd, text_name.decode("gbk"), class_name))
                 if class_name in ('Button', 'Edit'):
                     self.__control_hwnds.append((hwnd, text_name.decode("gbk"), class_name))
-                    if class_name == 'Button':
-                        name = text_name.decode("gbk")
-                        clickButton(hwnd)
+                    # if class_name == 'Button':
+                    #     name = text_name.decode("gbk")
+                    #     # clickButton(hwnd)
         # except:
         #     tkMessageBox.showerror('错误', '无法获得双向委托界面的窗口句柄')
 
@@ -73,16 +69,15 @@ class Operation:
         clickButton(self.__control_hwnds[7][0])
         time.sleep(1)
 
-    def order(self, code, stop_prices, direction, quantity):
+    def order(self, code, price, direction, quantity):
         """
         下单函数
         """
         # restoreFocusWindow(self.__top_hwnd)
-        print code, stop_prices
         if direction == 'B':
-            self.__buy(code, stop_prices[0], quantity)
+            self.__buy(code, price, quantity)
         if direction == 'S':
-            self.__sell(code, stop_prices[1], quantity)
+            self.__sell(code, price, quantity)
         return not closePopupWindow(self.__top_hwnd)
 
     def clickRefreshButton(self):

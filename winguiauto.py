@@ -23,6 +23,7 @@ def restoreFocusWindow(hwnd):
     win32gui.SetForegroundWindow(hwnd)
     time.sleep(0.2)
 
+
 def getTableData():
     content = _getContentsFromClipboard()
     lst = content.strip().split()[:-1]
@@ -411,6 +412,11 @@ def getWindowText(hwnd):
     """
     return win32gui.GetWindowText(hwnd)
 
+def getStaticText(hwnd):
+    len = win32gui.SendMessage(hwnd, win32con.WM_GETTEXTLENGTH) + 1  # 获取edit控件文本长度
+    buffer = '0' * len
+    win32gui.SendMessage(hwnd, win32con.WM_GETTEXT, len, buffer)  # 读取文本
+    return buffer[:len-1]
 
 def setEditText(hwnd, text):
     """

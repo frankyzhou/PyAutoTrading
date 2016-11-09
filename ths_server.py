@@ -18,7 +18,6 @@ def get_server(host='', port=51501):
 class ThsTrade:
     def __init__(self):
         self.server = get_server()
-        # self.logger = get_logger(COLLECTION)
 
     def judge_opera(self, msg):
         msg = msg.split()
@@ -43,8 +42,8 @@ class ThsTrade:
         return "Nothing."
 
     def get_position_by_stock(self, code):
-        position_yjb = self.operation.getPosition()
-        return position_yjb
+        position_broker = self.operation.getPosition()
+        return position_broker
         # while not isinstance(position_yjb, list):
         #     self.yjb.autologin()
         #     time.sleep(5)
@@ -59,15 +58,11 @@ class ThsTrade:
             self.operation = Operation(top_hwnd)
 
         while 1:
-            # try:
             request, address = self.server.recvfrom(READ_SIZE)
 
             response = self.judge_opera(request)
             self.server.sendto(str(response), address)
             if str(response) == STOP: break
-            # except Exception, e:
-            #    print e
-
 
 if __name__ == '__main__':
     ths = ThsTrade()

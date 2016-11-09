@@ -38,7 +38,7 @@ while 1:
         # data = "buy 000001 10.0 2000000"
         print data
         print datetime.datetime.now().strftime("%H:%M:%S")
-        c.exec_order(data)
+        print c.exec_order(data)
         print datetime.datetime.now().strftime("%H:%M:%S")
 
         # time.sleep(5)

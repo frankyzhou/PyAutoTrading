@@ -26,11 +26,11 @@ def restoreFocusWindow(hwnd):
 
 def getTableData():
     content = _getContentsFromClipboard()
-    lst = content.strip().split()[:-1]
+    lst = content.strip().split("\t")[:-1][16:]
     # matrix = []
     # for i in range(0, len(lst) // cols):
     #     matrix.append(lst[i * cols:(i + 1) * cols])
-    return lst[15:]
+    return lst
 
 
 def getListViewInfo(hwnd, cols):
@@ -158,6 +158,8 @@ def closePopupWindow(top_hwnd, wantedText=None, wantedClass=None):
     :return: 如果有弹出式对话框，返回True，否则返回False
     """
     hwnd_popup = findPopupWindow(top_hwnd)
+    hwnd_text = dumpWindows(hwnd_popup)[2][0]
+    print getStaticText(hwnd_text)
     if hwnd_popup:
         hwnd_control = findControl(hwnd_popup, wantedText, wantedClass)
         clickButton(hwnd_control)
@@ -413,10 +415,15 @@ def getWindowText(hwnd):
     return win32gui.GetWindowText(hwnd)
 
 def getStaticText(hwnd):
+    """
+    获得static框内文本
+    :param hwnd:
+    :return:
+    """
     len = win32gui.SendMessage(hwnd, win32con.WM_GETTEXTLENGTH) + 1  # 获取edit控件文本长度
     buffer = '0' * len
     win32gui.SendMessage(hwnd, win32con.WM_GETTEXT, len, buffer)  # 读取文本
-    return buffer[:len-1]
+    return buffer[:len-1].decode("gbk")
 
 def setEditText(hwnd, text):
     """

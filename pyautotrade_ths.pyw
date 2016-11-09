@@ -98,7 +98,7 @@ class Operation:
         """
         获取股票持仓
         """
-        restoreFocusWindow(self.__top_hwnd)
+        # restoreFocusWindow(self.__top_hwnd)
         clickWindow(self.__wanted_hwnds[-2][0], 20)
         sendKeyEvent(win32con.VK_CONTROL, 0)
         sendKeyEvent(ord('C'), 0)
@@ -106,14 +106,14 @@ class Operation:
         sendKeyEvent(win32con.VK_CONTROL, win32con.KEYEVENTF_KEYUP)
         position_list = []
         position = getTableData()
-        stock_num = len(position) / 13
+        stock_num = (len(position) +1) / 15
         for i in range(stock_num):
             stock = {}
-            stock["code"] = str(position[i * 13])
-            stock["amount"] = int(position[i * 13 + 2])
-            stock["enable"] = int(position[i * 13 + 3])
-            stock["price"] = float(position[i * 13 + 7])
-            stock["turnover"] = float(position[i * 13 + 8])
+            stock["code"] = str(position[i * 15])
+            stock["amount"] = int(position[i * 15 + 2])
+            stock["enable"] = int(position[i * 15 + 3])
+            stock["price"] = float(position[i * 15 + 7])
+            stock["turnover"] = float(position[i * 15 + 8])
             position_list.append(stock)
         return position_list
 

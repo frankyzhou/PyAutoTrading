@@ -104,7 +104,7 @@ class Operation:
         sendKeyEvent(ord('C'), 0)
         sendKeyEvent(ord('C'), win32con.KEYEVENTF_KEYUP)
         sendKeyEvent(win32con.VK_CONTROL, win32con.KEYEVENTF_KEYUP)
-        position_list = []
+        position_dict = {}
         position = getTableData()
         stock_num = (len(position) +1) / 15
         for i in range(stock_num):
@@ -114,8 +114,8 @@ class Operation:
             stock["enable"] = int(position[i * 15 + 3])
             stock["price"] = float(position[i * 15 + 7])
             stock["turnover"] = float(position[i * 15 + 8])
-            position_list.append(stock)
-        return position_list
+            position_dict[stock["code"]] = stock
+        return position_dict
 
 #     查询委托：control_hwnds[16][0], 其他持仓可以使用快捷键
 

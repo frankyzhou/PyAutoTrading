@@ -36,7 +36,6 @@ while 1:
         # time.sleep(5)
         # data = "get_position 0001"
         # data = "buy 000001 10.0 2000000"
-        print data
         print datetime.datetime.now().strftime("%H:%M:%S")
         print c.exec_order(data)
         print datetime.datetime.now().strftime("%H:%M:%S")

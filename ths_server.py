@@ -27,6 +27,9 @@ class ThsTrade:
             return STOP
 
         code = msg[1]
+
+        self.operation.clickRefreshButton()
+
         if type == GET_POSITION:
             print "查询仓位：" + code
             return self.get_position_by_stock(code)
@@ -43,12 +46,19 @@ class ThsTrade:
 
     def get_position_by_stock(self, code):
         position_broker = self.operation.getPosition()
-        return position_broker
-        # while not isinstance(position_yjb, list):
-        #     self.yjb.autologin()
-        #     time.sleep(5)
-        #     print "获取持仓失败，重连中"
-        #     position_yjb = self.yjb.get_position()
+        rest_money = self.operation.getMoney()
+        stock_money = 0.01
+        if len(position_broker) > 0:
+            for k in position_broker.keys():
+                stock_money += position_broker[k]["turnover"]
+        total_money = rest_money + stock_money
+        enable = 0
+        percent = 0.0
+        if position_broker.has_key(code):
+            enable = position_broker[code]["enable"]
+            stock_turnover = position_broker[k]["turnover"]
+            percent = stock_turnover / total_money
+        return percent, enable, total_money
 
     def main(self):
         top_hwnd = findTopWindow(wantedText=u'网上股票交易系统5.0')

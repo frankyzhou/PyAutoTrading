@@ -534,6 +534,7 @@ def _readListViewItems(hwnd, column_index=0):
 def _getContentsFromClipboard():
     win32clipboard.OpenClipboard()
     content = win32clipboard.GetClipboardData()
+    win32clipboard.EmptyClipboard()
     win32clipboard.CloseClipboard()
     return content
 

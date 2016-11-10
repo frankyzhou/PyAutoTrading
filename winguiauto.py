@@ -26,7 +26,11 @@ def restoreFocusWindow(hwnd):
 
 def getTableData():
     content = _getContentsFromClipboard()
-    lst = content.strip().split("\t")[:-1][16:]
+    lst = content.strip().split("\r\n")
+    if len(lst) == 1:
+        return []
+    else:
+        lst = content.strip().split("\r\n")[1:]
     # matrix = []
     # for i in range(0, len(lst) // cols):
     #     matrix.append(lst[i * cols:(i + 1) * cols])

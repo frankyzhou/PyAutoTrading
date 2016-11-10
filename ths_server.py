@@ -61,12 +61,13 @@ class ThsTrade:
         return percent, enable, total_money
 
     def main(self):
+        time.sleep(15)
         top_hwnd = findTopWindow(wantedText=u'网上股票交易系统5.0')
         if top_hwnd == 0:
-            tkMessageBox.showerror('错误', '请先打开华泰证券交易软件，再运行本软件')
+            print "无法找到客户端！".decode("gbk")
         else:
             self.operation = Operation(top_hwnd)
-
+            print "成功找到客户端!".decode("gbk")
         while 1:
             request, address = self.server.recvfrom(READ_SIZE)
 

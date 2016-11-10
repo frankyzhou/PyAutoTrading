@@ -6,7 +6,7 @@ import datetime
 import threading
 import pickle
 import time
-
+import copy
 import win32con
 import tushare as ts
 
@@ -106,15 +106,16 @@ class Operation:
         sendKeyEvent(win32con.VK_CONTROL, win32con.KEYEVENTF_KEYUP)
         position_dict = {}
         position = getTableData()
-        stock_num = (len(position) +1) / 15
-        for i in range(stock_num):
-            stock = {}
-            stock["code"] = str(position[i * 15])
-            stock["amount"] = int(position[i * 15 + 2])
-            stock["enable"] = int(position[i * 15 + 3])
-            stock["price"] = float(position[i * 15 + 7])
-            stock["turnover"] = float(position[i * 15 + 8])
-            position_dict[stock["code"]] = stock
+        stock = {}
+        if len(position) > 0:
+            for s in position:
+                tokens = s.split("\t")
+                stock["code"] = str(tokens[0])
+                stock["amount"] = int(tokens[2])
+                stock["enable"] = int(tokens[3])
+                stock["price"] = float(tokens[7])
+                stock["turnover"] = float(tokens[8])
+                position_dict[stock["code"]] = copy.deepcopy(stock)
         return position_dict
 
 #     查询委托：control_hwnds[16][0], 其他持仓可以使用快捷键

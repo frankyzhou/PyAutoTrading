@@ -74,13 +74,16 @@ class ThsTrade:
                 request, address = self.server.recvfrom(READ_SIZE)
                 response = self.judge_opera(request)
                 self.server.sendto(str(response), address)
-                if str(response) == STOP: break
+                if str(response) == STOP:
+                    print u"停止"
+                    return False
             except:
                 traceback.print_exc()
                 print u"重新启动"
-                return -1
+                return True
 
 if __name__ == '__main__':
-    while 1:
+    result = True
+    while result:
         ths = ThsTrade()
-        ths.main()
+        result = ths.main()

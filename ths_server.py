@@ -75,7 +75,7 @@ class ThsTrade:
                 response = self.judge_opera(request)
                 self.server.sendto(str(response), address)
                 if str(response) == STOP:
-                    print u"停止"
+                    print u"人工停止"
                     return False
             except:
                 traceback.print_exc()

@@ -78,6 +78,7 @@ class Operation:
             self.__buy(code, price, quantity)
         if direction == 'S':
             self.__sell(code, price, quantity)
+        time.sleep(1)
         return closePopupWindow(self.__top_hwnd)
 
     def clickRefreshButton(self):
@@ -109,11 +110,11 @@ class Operation:
         stock = {}
         if len(position) > 0:
             for s in position:
-                tokens = s.split("\t")
+                tokens = s.strip().split("\t")
                 stock["code"] = str(tokens[0])
                 stock["amount"] = int(tokens[2])
                 stock["enable"] = int(tokens[3])
-                stock["price"] = float(tokens[7])
+                # stock["price"] = float(tokens[7])
                 stock["turnover"] = float(tokens[8])
                 position_dict[stock["code"]] = copy.deepcopy(stock)
         return position_dict

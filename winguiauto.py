@@ -164,12 +164,14 @@ def closePopupWindow(top_hwnd, wantedText=None, wantedClass=None):
     hwnd_popup = findPopupWindow(top_hwnd)
     hwnd_text = dumpWindows(hwnd_popup)[2][0]
     error = getStaticText(hwnd_text)
-    print error
+    if len(error) > 0:
+        error = error.encode("utf-8").split()[0]
+        print error
     if hwnd_popup:
         hwnd_control = findControl(hwnd_popup, wantedText, wantedClass)
         clickButton(hwnd_control)
-        return "OK"
-    return error
+        return error
+    return "OK"
 
 
 def closePopupWindows(top_hwnd):

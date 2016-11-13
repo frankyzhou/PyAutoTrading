@@ -1,6 +1,8 @@
 # coding=utf-8
 import socket
 from pyautotrade_ths import *
+import traceback
+
 COLLECTION = "yjb_operation"
 GET_POSITION = "get_position"
 BUY = "buy"
@@ -31,15 +33,15 @@ class ThsTrade:
         self.operation.clickRefreshButton()
 
         if type == GET_POSITION:
-            print "查询仓位：" + code
+            print u"查询仓位：" + code
             return self.get_position_by_stock(code)
 
         price, amount = msg[2], msg[3]
         if type == BUY:
-            print "买入：" + code
+            print u"买入：" + code
             return self.operation.order(code=code, price=price, direction="B", quantity=amount)
         elif type == SELL:
-            print "卖出：" + code
+            print u"卖出：" + code
             return self.operation.order(code=code, price=price, direction="S", quantity=amount)
 
         return "Nothing."
@@ -56,25 +58,29 @@ class ThsTrade:
         percent = 0.0
         if position_broker.has_key(code):
             enable = position_broker[code]["enable"]
-            stock_turnover = position_broker[k]["turnover"]
+            stock_turnover = position_broker[code]["turnover"]
             percent = stock_turnover / total_money
         return percent, enable, total_money
 
     def main(self):
-        time.sleep(5)
         top_hwnd = findTopWindow(wantedText=u'网上股票交易系统5.0')
         if top_hwnd == 0:
-            print "无法找到客户端！"
+            print u"无法找到客户端"
         else:
             self.operation = Operation(top_hwnd)
-            print "成功找到客户端!"
+            print u"成功找到客户端"
         while 1:
-            request, address = self.server.recvfrom(READ_SIZE)
-
-            response = self.judge_opera(request)
-            self.server.sendto(str(response), address)
-            if str(response) == STOP: break
+            try:
+                request, address = self.server.recvfrom(READ_SIZE)
+                response = self.judge_opera(request)
+                self.server.sendto(str(response), address)
+                if str(response) == STOP: break
+            except:
+                traceback.print_exc()
+                print u"重新启动"
+                return -1
 
 if __name__ == '__main__':
-    ths = ThsTrade()
-    ths.main()
+    while 1:
+        ths = ThsTrade()
+        ths.main()

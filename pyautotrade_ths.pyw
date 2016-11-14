@@ -26,20 +26,13 @@ class Operation:
     def __init__(self, top_hwnd):
         # try:
             self.__top_hwnd = top_hwnd
-            temp_hwnds = dumpWindows(top_hwnd)
+            self.__temp_hwnds = dumpWindows(top_hwnd)
             # self.__wanted_hwnds = findSubWindows(temp_hwnds, 70)  # 华泰专用版
-            self.__wanted_hwnds = findSubWindows(temp_hwnds, 73)   # 同花顺通用版
+            self.__wanted_hwnds = findSubWindows(self.__temp_hwnds, 73)   # 同花顺通用版
             self.__control_hwnds = []
-            self.__wanted_hwnds_tmp = []
             for hwnd, text_name, class_name in self.__wanted_hwnds:
-                self.__wanted_hwnds_tmp.append((hwnd, text_name.decode("gbk"), class_name))
                 if class_name in ('Button', 'Edit'):
                     self.__control_hwnds.append((hwnd, text_name.decode("gbk"), class_name))
-                    # if class_name == 'Button':
-                    #     name = text_name.decode("gbk")
-                    #     # clickButton(hwnd)
-        # except:
-        #     tkMessageBox.showerror('错误', '无法获得双向委托界面的窗口句柄')
 
     def __buy(self, code, stop_price, quantity):
         """下买单
@@ -93,6 +86,7 @@ class Operation:
         获取可用资金
         """
         #restoreFocusWindow(self.__top_hwnd)
+        self.__wanted_hwnds = findSubWindows(self.__temp_hwnds, 73)   # 更新可用资金
         return float(self.__wanted_hwnds[51][1])
 
     def getPosition(self):

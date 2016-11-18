@@ -1,12 +1,11 @@
 # -*- encoding: utf8 -*-
-
 import time
 import struct
 import win32api
 import win32gui
 import ctypes
 import win32clipboard
-
+import pyautogui
 import win32con
 import commctrl
 
@@ -36,6 +35,22 @@ def getTableData():
     #     matrix.append(lst[i * cols:(i + 1) * cols])
     return lst
 
+def getTableDataFromFile(path):
+    screenWidth, screenHeight = pyautogui.size()
+    pyautogui.moveTo(screenWidth * 0.2, screenHeight * 0.9)
+    pyautogui.click()
+    pyautogui.hotkey('ctrl', 'a')
+    pyautogui.hotkey('ctrl', 'v')
+    pyautogui.hotkey('ctrl', 's')
+    file = open(path)
+    content= file.read()
+    file.close()
+    lst = content.strip().split("\t\n")
+    if len(lst) == 1:
+        return []
+    else:
+        lst = content.strip().split("\r\n")[1:]
+    return lst
 
 def getListViewInfo(hwnd, cols):
     """

@@ -12,7 +12,7 @@ import tushare as ts
 
 from winguiauto import (dumpWindows, clickButton, click, setEditText,
                         findSubWindows, closePopupWindow, clickWindow,
-                        findTopWindow, getTableData, sendKeyEvent, restoreFocusWindow)
+                        findTopWindow, getTableData, sendKeyEvent, restoreFocusWindow, getTableDataFromFile)
 
 is_start = False
 is_monitor = True
@@ -100,7 +100,8 @@ class Operation:
         sendKeyEvent(ord('C'), win32con.KEYEVENTF_KEYUP)
         sendKeyEvent(win32con.VK_CONTROL, win32con.KEYEVENTF_KEYUP)
         position_dict = {}
-        position = getTableData()
+        # position = getTableData()
+        position = getTableDataFromFile("position.csv")
         stock = {}
         if len(position) > 0:
             for s in position:
@@ -108,7 +109,6 @@ class Operation:
                 stock["code"] = str(tokens[0])
                 stock["amount"] = int(tokens[2])
                 stock["enable"] = int(tokens[3])
-                # stock["price"] = float(tokens[7])
                 stock["turnover"] = float(tokens[8])
                 position_dict[stock["code"]] = copy.deepcopy(stock)
         return position_dict

@@ -5,7 +5,7 @@ import time
 import traceback
 import sys
 
-def get_client(host='127.0.0.1', textport=51501, timeout=15):
+def get_client(host='127.0.0.1', textport=51500, timeout=15):
     # 如果超时一般都是交易端有故障，抛出异常，邮件提示
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:

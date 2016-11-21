@@ -49,7 +49,7 @@ def getTableDataFromFile(path):
     if len(lst) == 1:
         return []
     else:
-        lst = content.strip().split("\r\n")[1:]
+        lst = content.strip().split("\t\n")[1:]
     return lst
 
 def getListViewInfo(hwnd, cols):
@@ -181,7 +181,7 @@ def closePopupWindow(top_hwnd, wantedText=None, wantedClass=None):
     error = getStaticText(hwnd_text)
     if len(error) > 0:
         error = error.split()[0].encode("utf-8")# encode string
-        print error
+        print error.decode("utf-8")
     if hwnd_popup:
         hwnd_control = findControl(hwnd_popup, wantedText, wantedClass)
         clickButton(hwnd_control)

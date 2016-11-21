@@ -11,7 +11,7 @@ STOP = "stop"
 READ_SIZE = 8192
 
 
-def get_server(host='', port=51501):
+def get_server(host='', port=51500):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.bind((host, port))

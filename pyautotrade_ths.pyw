@@ -44,9 +44,9 @@ class Operation:
         click(self.__control_hwnds[0][0])
         setEditText(self.__control_hwnds[0][0], str(code))
         setEditText(self.__control_hwnds[1][0], stop_price)
-        # time.sleep(0.2)
+        time.sleep(0.2)
         setEditText(self.__control_hwnds[2][0], quantity)
-        # time.sleep(0.2)
+        time.sleep(0.2)
         clickButton(self.__control_hwnds[3][0])
         # time.sleep(1)
 
@@ -56,9 +56,9 @@ class Operation:
         click(self.__control_hwnds[4][0])
         setEditText(self.__control_hwnds[4][0], str(code))
         setEditText(self.__control_hwnds[5][0], stop_price)
-        # time.sleep(0.2)
+        time.sleep(0.2)
         setEditText(self.__control_hwnds[6][0], quantity)
-        # time.sleep(0.2)
+        time.sleep(0.2)
         clickButton(self.__control_hwnds[7][0])
         # time.sleep(1)
 

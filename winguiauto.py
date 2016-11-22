@@ -35,6 +35,7 @@ def getTableData():
     #     matrix.append(lst[i * cols:(i + 1) * cols])
     return lst
 
+
 def getTableDataFromFile(path):
     screenWidth, screenHeight = pyautogui.size()
     pyautogui.moveTo(screenWidth * 0.2, screenHeight * 0.9)

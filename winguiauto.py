@@ -177,7 +177,13 @@ def closePopupWindow(top_hwnd, wantedText=None, wantedClass=None):
     :return: 如果有弹出式对话框，返回True，否则返回False
     """
     hwnd_popup = findPopupWindow(top_hwnd)
-    hwnd_text = dumpWindows(hwnd_popup)[2][0]
+    if hwnd_popup == 0:
+        return
+    windows = dumpWindows(hwnd_popup)
+    if windows[0][1].decode("gbk") == u"提示":
+        clickButton(windows[1][0])
+        return
+    hwnd_text = windows[2][0]
     error = getStaticText(hwnd_text)
     if len(error) > 0:
         error = error.split()[0].encode("utf-8")# encode string

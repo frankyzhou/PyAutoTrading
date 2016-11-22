@@ -94,6 +94,7 @@ class Operation:
         获取股票持仓
         """
         # restoreFocusWindow(self.__top_hwnd)
+        closePopupWindow(self.__top_hwnd)
         clickWindow(self.__wanted_hwnds[-2][0], 20)
         sendKeyEvent(win32con.VK_CONTROL, 0)
         sendKeyEvent(ord('C'), 0)

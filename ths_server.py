@@ -23,7 +23,7 @@ class ThsTrade:
 
     def judge_opera(self, msg):
         msg = msg.split()
-        type= msg[0]
+        type = msg[0]
 
         if type == STOP:
             return STOP
@@ -48,6 +48,8 @@ class ThsTrade:
 
     def get_position_by_stock(self, code):
         position_broker = self.operation.getPosition()
+        if code == "all":
+            return position_broker
         rest_money = self.operation.getMoney()
         stock_money = 0.01
         if len(position_broker) > 0:
@@ -84,6 +86,7 @@ class ThsTrade:
 
 if __name__ == '__main__':
     result = True
+    is_first = True
     while result:
         ths = ThsTrade()
         result = ths.main()

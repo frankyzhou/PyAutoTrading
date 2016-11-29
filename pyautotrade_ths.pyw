@@ -101,7 +101,6 @@ class Operation:
         sendKeyEvent(ord('C'), win32con.KEYEVENTF_KEYUP)
         sendKeyEvent(win32con.VK_CONTROL, win32con.KEYEVENTF_KEYUP)
         position_dict = {}
-        # position = getTableData()
         position = getTableDataFromFile("position.csv")
         stock = {}
         if len(position) > 0:

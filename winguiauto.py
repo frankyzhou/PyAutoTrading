@@ -179,7 +179,7 @@ def closePopupWindow(top_hwnd, wantedText=None, wantedClass=None):
     """
     hwnd_popup = findPopupWindow(top_hwnd)
     if hwnd_popup == 0:
-        return
+        return "OK"
     windows = dumpWindows(hwnd_popup)
     if windows[0][1].decode("gbk") == u"提示":
         clickButton(windows[1][0])
